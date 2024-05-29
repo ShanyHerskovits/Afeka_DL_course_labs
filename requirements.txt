@@ -9,3 +9,4 @@ black
 tensorflow
 torch
 keras
+tensorflow_datasets
