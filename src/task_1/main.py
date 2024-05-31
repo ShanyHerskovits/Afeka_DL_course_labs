@@ -14,4 +14,6 @@ def load_mnist():
 
 # Section 4 - please see stats.py
 
-# Section 5 - please see simple_model.py
+# Section 5,6,7 - please see simple_model.py
+
+# Section 8 - please see datasets_generator.py
