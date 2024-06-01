@@ -1,18 +1,29 @@
 import tensorflow as tf
+from mnist_stats import print_mnist_stats
+
+# 1. Choose a Python environment and install it on your computer (PyCharm or Google Colab).
+print(
+    "We have used virtual environment and install all requirements listed in requirements.txt"
+)
+
+# 2. Install the following libraries: numpy, matplotlib, pandas, tensorflow, sklearn, and pytorch.
+# Please see file requirements.txt for details.
 
 
-## section 3 Write a program that loads the MNIST dataset.
+# section 3 Write a program that loads the MNIST dataset.
 def load_mnist():
     # Load the dataset
     (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-
-    print(f"Training data shape: {x_train.shape}")
-    print(f"Test data shape: {x_test.shape}")
-
-    return (x_train, y_train), (x_test, y_test)
+    train = (x_train, y_train)
+    test = (x_test, y_test)
+    return train, test
 
 
-# Section 4 - please see stats.py
+# This is the original dataset we are going to use
+train, test = load_mnist()
+
+# Section 4 - please see mnist_stats.py
+print_mnist_stats(train=train, test=test)
 
 # Section 5,6,7 - please see simple_model.py
 
