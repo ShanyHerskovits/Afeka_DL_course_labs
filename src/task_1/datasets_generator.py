@@ -6,9 +6,8 @@ Construct a new dataset by generating a new image for each image in the original
 import numpy as np
 import tensorflow as tf
 from scipy.ndimage import convolve
-
-# Load the MNIST dataset
-(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+import matplotlib.pyplot as plt
+from plot_utils import save_plot
 
 
 def apply_averaging_filter(image):
@@ -21,22 +20,23 @@ def apply_averaging_filter(image):
     return filtered_image
 
 
-# Apply the averaging filter to each image in the dataset
-x_train_filtered = np.array([apply_averaging_filter(image) for image in x_train])
-x_test_filtered = np.array([apply_averaging_filter(image) for image in x_test])
+def pixel_surrounding_filter(x_train, x_test):
+    # Apply the averaging filter to each image in the dataset
+    x_train_filtered = np.array([apply_averaging_filter(image) for image in x_train])
+    x_test_filtered = np.array([apply_averaging_filter(image) for image in x_test])
 
-# Ensure the new dataset has the same shape
-print(f"Original training data shape: {x_train.shape}")
-print(f"Filtered training data shape: {x_train_filtered.shape}")
-print(f"Original test data shape: {x_test.shape}")
-print(f"Filtered test data shape: {x_test_filtered.shape}")
+    # Ensure the new dataset has the same shape
+    print(f"Original training data shape: {x_train.shape}")
+    print(f"Filtered training data shape: {x_train_filtered.shape}")
+    print(f"Original test data shape: {x_test.shape}")
+    print(f"Filtered test data shape: {x_test_filtered.shape}")
 
-import matplotlib.pyplot as plt
+    return x_train_filtered, x_test_filtered
 
 
 # Plot original and filtered images for comparison
 def plot_comparison(original, filtered, num_images=5):
-    plt.figure(figsize=(10, 4))
+    fig = plt.figure(figsize=(10, 4))
     for i in range(num_images):
         # Original images
         plt.subplot(2, num_images, i + 1)
@@ -50,7 +50,18 @@ def plot_comparison(original, filtered, num_images=5):
         plt.title("Filtered")
         plt.axis("off")
 
+    plt.show()
+    save_plot(fig, "pixel_surrounding_filter")
+    plt.close()
 
-# Display the comparison
-plot_comparison(x_train, x_train_filtered)
-plt.show()
+
+def pixel_surrounding_main(train, test) -> None:
+    # Unpack train and test datasets
+    x_train, y_train = train
+    x_test, y_test = test
+
+    # Apply the averaging filter to each image in the dataset
+    x_train_filtered, x_test_filtered = pixel_surrounding_filter(x_train, x_test)
+
+    # Display the comparison
+    plot_comparison(x_train, x_train_filtered)
