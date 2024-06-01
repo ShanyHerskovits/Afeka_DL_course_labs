@@ -1,7 +1,14 @@
 import tensorflow as tf
 from mnist_stats import print_mnist_stats
 from simple_model import simple_model_main
-from datasets_generator import pixel_surrounding_main
+from datasets_generator import (
+    apply_pca_reduction,
+    create_dataset_with_filter,
+    pixel_surrounding_filter,
+)
+from plot_utils import plot_comparison
+
+skip = True
 
 # 1. Choose a Python environment and install it on your computer (PyCharm or Google Colab).
 print(
@@ -24,11 +31,26 @@ def load_mnist():
 # This is the original dataset we are going to use
 train, test = load_mnist()
 
-# Section 4 - please see mnist_stats.py
-# print_mnist_stats(train=train, test=test)
+if not skip:
+    # Section 4 - please see mnist_stats.py
+    print_mnist_stats(train=train, test=test)
 
-# Section 5,6,7 - please see simple_model.py
-# simple_model_main(train=train, test=test)
+    # Section 5,6,7 - please see simple_model.py
+    simple_model_main(train=train, test=test, file_prefix="original")
 
-# Section 8 - please see datasets_generator.py
-pixel_surrounding_main(train=train, test=test)
+    # Section 8 - please see datasets_generator.py
+    train_filtered, test_filtered = create_dataset_with_filter(train=train, test=test)
+    plot_comparison(original=train[0], filtered=train_filtered[0], num_images=5)
+
+    # re run 5-7 steps for the data after the filter
+    simple_model_main(
+        train=train_filtered, test=test_filtered, file_prefix="filtered_avg"
+    )
+
+    # section 10 a
+    train_pca, test_pca = apply_pca_reduction(train, test)
+    simple_model_main(
+        train=train_pca, test=test_pca, file_prefix="pca", input_shape=(50,)
+    )
+
+    # section 10 b
