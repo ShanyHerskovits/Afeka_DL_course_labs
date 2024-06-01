@@ -9,3 +9,4 @@ black
 tensorflow
 torch
 keras
+pyclean==2.7.5
