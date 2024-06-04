@@ -55,3 +55,29 @@ def apply_pca_reduction(train, test):
 
     print(x_test_pca.shape)
     return (x_train_pca, train[1]), (x_test_pca, test[1])
+
+
+# apply 3x3 non-overlapping averaging filter
+def rolling_window(image, window_size):
+    conv_image = []
+    image_height, image_width = image.shape[0], image.shape[1]
+    width, height = window_size
+    for i in range(0, image_height, height):
+        row = []
+        for j in range(0, image_width, width):
+            row.append(np.mean(image[i : i + height, j : j + width]))
+        conv_image.append(np.array(row))
+
+    return np.array(conv_image)
+
+
+def create_non_overlapping_filter_dataset(train, test):
+    # run 3x3 convoultion on non-overlapping frames
+    x_train_filtered = np.array([rolling_window(image, (3, 3)) for image in train[0]])
+    x_test_filtered = np.array([rolling_window(image, (3, 3)) for image in test[0]])
+
+    # reshape for training and testing later
+    return (x_train_filtered.reshape(-1, 10 * 10), train[1]), (
+        x_test_filtered.reshape(-1, 10 * 10),
+        test[1],
+    )
