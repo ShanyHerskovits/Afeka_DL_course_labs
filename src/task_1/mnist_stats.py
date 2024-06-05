@@ -4,6 +4,7 @@ average number of white pixels in each class and its standard deviation,
 the number of common pixels in each class that are non-white.
 """
 
+import json
 import numpy as np
 import tensorflow as tf
 from collections import defaultdict
@@ -12,6 +13,8 @@ from plot_utils import save_plot
 
 
 def print_mnist_stats(train, test):
+    mnist_info = dict()
+
     # Unpack train and test datasets
     x_train, y_train = train
     x_test, y_test = test
@@ -22,7 +25,7 @@ def print_mnist_stats(train, test):
 
     # Number of images
     num_images = x_data.shape[0]
-    print(f"Number of images: {num_images}")
+    mnist_info["Number of images"] = num_images
 
     # Distribution of images across classes
     unique, counts = np.unique(y_data, return_counts=True)
@@ -39,8 +42,8 @@ def print_mnist_stats(train, test):
         avg_white_pixels[i] = np.mean(white_pixel_counts)
         std_white_pixels[i] = np.std(white_pixel_counts)
 
-    print("Average number of white pixels per class:", avg_white_pixels)
-    print("Standard deviation of white pixels per class:", std_white_pixels)
+    mnist_info["Average number of white pixels per class"] = avg_white_pixels
+    mnist_info["Standard deviation of white pixels per class"] = std_white_pixels
 
     # Calculate common non-white pixels in each class
     common_non_white_pixels = defaultdict(set)
@@ -54,6 +57,8 @@ def print_mnist_stats(train, test):
 
     print("Number of common non-white pixels per class:", dict(common_non_white_pixels))
 
+    # save to file
+    save_mnist_stats_to_file(mnist_info, "mnist_stats.json")
     visualize_white_pixels(avg_white_pixels, std_white_pixels)
 
 
@@ -68,3 +73,8 @@ def visualize_white_pixels(avg_white_pixels, std_white_pixels):
     plt.title("Average number of white pixels per class with standard deviation")
     plt.show()
     save_plot(fig, "avg_white_pixelsper_class_with_std")
+
+
+def save_mnist_stats_to_file(mnist_info, filename):
+    with open(filename, "w") as f:
+        json.dump(mnist_info, f)
