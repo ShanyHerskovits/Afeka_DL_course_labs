@@ -29,7 +29,10 @@ def print_mnist_stats(train, test):
 
     # Distribution of images across classes
     unique, counts = np.unique(y_data, return_counts=True)
-    distribution = dict(zip(unique, counts))
+    distribution = dict()
+    for u, c in zip(unique, counts):
+        distribution[u] = c
+
     print(f"Distribution of images across classes: {distribution}")
 
     # Calculate average number of white pixels and standard deviation for each class
