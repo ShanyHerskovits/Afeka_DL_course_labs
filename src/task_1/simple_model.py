@@ -10,6 +10,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import itertools
 import matplotlib.pyplot as plt
 from plot_utils import plot_confusion_matrix, plot_loss, save_plot
+from io_utils import save_report_to_file
 
 
 # preprocess data
@@ -64,13 +65,13 @@ def train_and_evaluate_model(model, x_train, y_train, x_test, y_test, file_prefi
     # Calculate the confusion matrix
     conf_matrix = confusion_matrix(y_test, y_pred_classes)
 
-    evaluate_results(report, conf_matrix)
+    evaluate_results(report, conf_matrix, file_prefix)
     plot_confusion_matrix(
         conf_matrix, classes=range(10), title="Confusion Matrix", prefix=file_prefix
     )
 
 
-def evaluate_results(report, conf_matrix):
+def evaluate_results(report, conf_matrix, file_prefix):
     # Extract precision, recall, F1-score, and support for each class
     precision = report["weighted avg"]["precision"]
     recall = report["weighted avg"]["recall"]
@@ -81,11 +82,14 @@ def evaluate_results(report, conf_matrix):
     sensitivity = recall
     specificity = np.sum(np.diag(conf_matrix)) / np.sum(conf_matrix)
 
-    print(f"Precision: {precision}")
-    print(f"Recall (Sensitivity): {recall}")
-    print(f"F1 Score: {f1_score}")
-    print(f"Sensitivity: {sensitivity}")
-    print(f"Specificity: {specificity}")
+    report_to_save = {
+        "Precision": precision,
+        "Recall (Sensitivity)": recall,
+        "F1 Score": f1_score,
+        "Sensitivity": sensitivity,
+        "Specificity": specificity,
+    }
+    save_report_to_file(report_to_save, filename=f"{file_prefix}_model")
 
 
 def simple_model_main(train, test, file_prefix="original", input_shape=(28 * 28,)):
