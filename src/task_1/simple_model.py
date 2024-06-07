@@ -94,9 +94,12 @@ def evaluate_results(report, conf_matrix, file_prefix):
 
 def simple_model_main(train, test, file_prefix="original", input_shape=(28 * 28,)):
     # Preprocess the data
-    # x_train, y_train, x_test, y_test = preprocess(train, test)
-    x_train, y_train = train
-    x_test, y_test = test
+    if file_prefix in ["original", "filtered_avg"]:
+        x_train, y_train, x_test, y_test = preprocess(train, test)
+
+    else:
+        x_train, y_train = train
+        x_test, y_test = test
 
     # Build the model
     model = build_model(input_shape=input_shape)
