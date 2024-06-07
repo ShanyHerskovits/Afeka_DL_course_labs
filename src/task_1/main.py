@@ -10,8 +10,6 @@ from datasets_generator import (
 )
 from plot_utils import plot_comparison
 
-skip = True
-
 # 1. Choose a Python environment and install it on your computer (PyCharm or Google Colab).
 print(
     "We have used virtual environment and install all requirements listed in requirements.txt"
@@ -33,39 +31,34 @@ def load_mnist():
 # This is the original dataset we are going to use
 train, test = load_mnist()
 
-if not skip:
-    # Section 4 - please see mnist_stats.py
-    print_mnist_stats(train=train, test=test)
+# Section 4 - please see mnist_stats.py
+print_mnist_stats(train=train, test=test)
 
-    # Section 5,6,7 - please see simple_model.py
-    simple_model_main(train=train, test=test, file_prefix="original")
+# Section 5,6,7 - please see simple_model.py
+simple_model_main(train=train, test=test, file_prefix="original")
 
-    # Section 8 - please see datasets_generator.py
-    train_filtered, test_filtered = create_dataset_with_filter(train=train, test=test)
-    plot_comparison(original=train[0], filtered=train_filtered[0], num_images=5)
+# Section 8 - please see datasets_generator.py
+train_filtered, test_filtered = create_dataset_with_filter(train=train, test=test)
+plot_comparison(original=train[0], filtered=train_filtered[0], num_images=5)
 
-    # re run 5-7 steps for the data after the filter
-    simple_model_main(
-        train=train_filtered, test=test_filtered, file_prefix="filtered_avg"
-    )
+# re run 5-7 steps for the data after the filter
+simple_model_main(train=train_filtered, test=test_filtered, file_prefix="filtered_avg")
 
-    # section 10 a
-    train_pca, test_pca = apply_pca_reduction(train, test)
+# section 10 a
+train_pca, test_pca = apply_pca_reduction(train, test)
 
-    # running model on pca data
-    simple_model_main(
-        train=train_pca, test=test_pca, file_prefix="pca", input_shape=(50,)
-    )
+# running model on pca data
+simple_model_main(train=train_pca, test=test_pca, file_prefix="pca", input_shape=(50,))
 
-    # section 10 b
-    train_non_ovelapping, test_non_ovelapping = create_non_overlapping_filter_dataset(
-        train, test
-    )
+# section 10 b
+train_non_ovelapping, test_non_ovelapping = create_non_overlapping_filter_dataset(
+    train, test
+)
 
-    # section 11 - running model on 3x3 convolution non overlapping
-    simple_model_main(
-        train=train_non_ovelapping,
-        test=test_non_ovelapping,
-        file_prefix="non_overlapping",
-        input_shape=(10 * 10,),
-    )
+# section 11 - running model on 3x3 convolution non overlapping
+simple_model_main(
+    train=train_non_ovelapping,
+    test=test_non_ovelapping,
+    file_prefix="non_overlapping",
+    input_shape=(10 * 10,),
+)
