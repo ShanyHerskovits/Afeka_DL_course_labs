@@ -1,14 +1,13 @@
 import tensorflow as tf
-import numpy as np
 from mnist_stats import print_mnist_stats
 from simple_model import simple_model_main
 from datasets_generator import (
     apply_pca_reduction,
     create_dataset_with_filter,
     create_non_overlapping_filter_dataset,
-    pixel_surrounding_filter,
 )
 from plot_utils import plot_comparison
+from imbalance import prepare_over_and_under_datasets
 
 # 1. Choose a Python environment and install it on your computer (PyCharm or Google Colab).
 print(
@@ -42,7 +41,7 @@ train_filtered, test_filtered = create_dataset_with_filter(train=train, test=tes
 plot_comparison(original=train[0], filtered=train_filtered[0], num_images=5)
 
 # re run 5-7 steps for the data after the filter
-simple_model_main(train=train_filtered, test=test_filtered, file_prefix="filtered_avg")
+simple_model_main(train=train_filtered, test=test_filtered, file_prefix="filter_avg")
 
 # section 10 a
 train_pca, test_pca = apply_pca_reduction(train, test)
@@ -62,3 +61,10 @@ simple_model_main(
     file_prefix="non_overlapping",
     input_shape=(10 * 10,),
 )
+
+# Section 13-14 - please see imbalance.py
+train_under, train_over_aug = prepare_over_and_under_datasets(x=train[0], y=train[1])
+# Section 14 data from 13 a - undersampling of two classes  - (Sections 11 -> 5,6,7) please see simple_model.py
+simple_model_main(train=train_under, test=test, file_prefix="filter_undersample")
+# Section 14 data from 13 b - Oversampling of two classes by image augmentation  - (Sections 11 -> 5,6,7) please see simple_model.py
+simple_model_main(train=train_over_aug, test=test, file_prefix="filter_oversample")
