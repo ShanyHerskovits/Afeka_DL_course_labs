@@ -19,6 +19,10 @@ def preprocess(train, test):
     x_train, y_train = train
     x_test, y_test = test
 
+    # normalize type and range for train and test
+    x_train = x_train.astype("float32") / 255.0
+    x_test = x_test.astype("float32") / 255.0
+
     # Flatten the images for the neural network input
     x_train = x_train.reshape(-1, 28 * 28)
     x_test = x_test.reshape(-1, 28 * 28)
@@ -30,8 +34,8 @@ def build_model(input_shape):
     # Build the model
     model = tf.keras.Sequential(
         [
-            tf.keras.layers.Dense(128, activation="relu", input_shape=input_shape),
-            tf.keras.layers.Dense(64, activation="relu"),
+            tf.keras.layers.Input(shape=input_shape),
+            tf.keras.layers.Dense(128, activation="relu"),
             tf.keras.layers.Dense(10, activation="softmax"),
         ]
     )
@@ -46,7 +50,7 @@ def build_model(input_shape):
 
 def train_and_evaluate_model(model, x_train, y_train, x_test, y_test, file_prefix):
     # Train the model
-    history = model.fit(x_train, y_train, epochs=10, validation_split=0.2)
+    history = model.fit(x_train, y_train, epochs=12, validation_split=0.2)
 
     # plot trainig loss - section 7 in the task
     plot_loss(history, file_prefix + "_loss")
@@ -94,7 +98,12 @@ def evaluate_results(report, conf_matrix, file_prefix):
 
 def simple_model_main(train, test, file_prefix="original", input_shape=(28 * 28,)):
     # Preprocess the data
-    if file_prefix in ["original", "filtered_avg"]:
+    if file_prefix in [
+        "original",
+        "filter_avg",
+        "filter_undersample",
+        "filter_oversample",
+    ]:
         x_train, y_train, x_test, y_test = preprocess(train, test)
 
     else:

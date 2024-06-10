@@ -31,7 +31,9 @@ def save_plot(fig, filename, folder="plots"):
 
 
 # Plot original and filtered images for comparison
-def plot_comparison(original, filtered, num_images=5):
+def plot_comparison(
+    original, filtered, num_images=5, filename="pixel_surrounding_filter"
+):
     fig = plt.figure(figsize=(10, 4))
     for i in range(num_images):
         # Original images
@@ -47,7 +49,7 @@ def plot_comparison(original, filtered, num_images=5):
         plt.axis("off")
 
     plt.show()
-    save_plot(fig, "pixel_surrounding_filter")
+    save_plot(fig, f"comparison_{filename}")
     plt.close()
 
 
@@ -103,4 +105,11 @@ def plot_confusion_matrix(
     plt.tight_layout()
     plt.show()
     save_plot(fig, prefix + "_confusion_matrix_simple_model")
+    plt.close()
+
+
+# Helper function to visualize a sample image
+def show_image(img):
+    plt.imshow(img, cmap="gray")
+    plt.show()
     plt.close()

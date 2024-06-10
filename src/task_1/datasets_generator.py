@@ -53,7 +53,10 @@ def apply_pca_reduction(train, test):
     x_train_pca = pca.fit_transform(x_train_flattened)
     x_test_pca = pca.transform(x_test_flattened)
 
-    print(x_test_pca.shape)
+    print(f"shape of data after pca is {x_test_pca.shape}")
+    x_train_pca = x_train_pca.astype("float32") / 255.0
+    x_test_pca = x_test_pca.astype("float32") / 255.0
+
     return (x_train_pca, train[1]), (x_test_pca, test[1])
 
 
@@ -75,6 +78,10 @@ def create_non_overlapping_filter_dataset(train, test):
     # run 3x3 convoultion on non-overlapping frames
     x_train_filtered = np.array([rolling_window(image, (3, 3)) for image in train[0]])
     x_test_filtered = np.array([rolling_window(image, (3, 3)) for image in test[0]])
+
+    # ensure type and normalizition
+    x_train_filtered = x_train_filtered.astype("float32") / 255.0
+    x_test_filtered = x_test_filtered.astype("float32") / 255.0
 
     # reshape for training and testing later
     return (x_train_filtered.reshape(-1, 10 * 10), train[1]), (
