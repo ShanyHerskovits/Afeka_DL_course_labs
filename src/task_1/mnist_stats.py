@@ -26,6 +26,7 @@ def print_mnist_stats(train, test):
     # Number of images
     num_images = x_data.shape[0]
     mnist_info["Number of images"] = num_images
+    print(f"Number of images: {num_images}")
 
     # Distribution of images across classes
     unique, counts = np.unique(y_data, return_counts=True)
@@ -46,7 +47,10 @@ def print_mnist_stats(train, test):
         std_white_pixels[i] = np.std(white_pixel_counts)
 
     mnist_info["Average number of white pixels per class"] = avg_white_pixels
+    print("Average number of white pixels per class:", avg_white_pixels)
+
     mnist_info["Standard deviation of white pixels per class"] = std_white_pixels
+    print("Standard deviation of white pixels per class:", std_white_pixels)
 
     # Calculate common non-white pixels in each class
     common_non_white_pixels = defaultdict(set)
