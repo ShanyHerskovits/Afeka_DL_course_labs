@@ -36,7 +36,6 @@ def build_model(input_shape):
         [
             tf.keras.layers.Input(shape=input_shape),
             tf.keras.layers.Dense(128, activation="relu"),
-            tf.keras.layers.BatchNormalization(),
             tf.keras.layers.Dense(10, activation="softmax"),
         ]
     )

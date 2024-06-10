@@ -1,7 +1,1 @@
-{
-  "Precision": 0.9788284301121757,
-  "Recall (Sensitivity)": 0.9788,
-  "F1 Score": 0.9787970608058315,
-  "Sensitivity": 0.9788,
-  "Specificity": 0.9788
-}
+{"Precision": 0.976190838481333, "Recall (Sensitivity)": 0.976, "F1 Score": 0.9760193288413497, "Sensitivity": 0.976, "Specificity": 0.976}
