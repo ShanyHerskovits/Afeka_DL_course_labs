@@ -50,7 +50,7 @@ def build_model(input_shape):
 
 def train_and_evaluate_model(model, x_train, y_train, x_test, y_test, file_prefix):
     # Train the model
-    history = model.fit(x_train, y_train, epochs=12, validation_split=0.2)
+    history = model.fit(x_train, y_train, epochs=20, validation_split=0.2)
 
     # plot trainig loss - section 7 in the task
     plot_loss(history, file_prefix + "_loss")
