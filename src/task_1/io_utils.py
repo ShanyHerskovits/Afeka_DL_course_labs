@@ -13,3 +13,10 @@ def save_report_to_file(report, filename):
 
     with open(filepath, "w") as f:
         json.dump(report, f)
+
+
+def get_model_results(filename: str) -> dict:
+    with open(filename, "r") as f:
+        report = json.load(f)
+
+    return report
